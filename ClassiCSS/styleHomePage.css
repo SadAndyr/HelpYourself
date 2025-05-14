@@ -1,0 +1,38 @@
+#contenitore{
+    width: 80%;
+    min-height: device-height;
+    margin: auto;
+    background: #FFFFFF;
+
+}
+
+form#form_filtri{
+    display: flex;
+}
+
+header{
+    height: 15%;
+    display: flex;
+    text-align: center;
+    
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+#container {
+    width: 80%;
+    min-height: 150vh;
+    margin: auto;
+    background: #FFFFFF;
+}
+
+body{
+    font-family: Verdana, Tahoma, "Times New Roman", Times, serif;
+    line-height: 1.5;
+    background-color: brown;
+}
