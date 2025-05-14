@@ -1,16 +1,16 @@
 <?php
-include '../database/db_connect.php';
+include 'C:\xampp\htdocs\HelpYourself\Database\dbConnection.php';
 
 $message = "";
 $toastClass = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
+    $nome = $_POST['username'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $pwd = $_POST['password'];
 
     // Check if email already exists
-    $checkEmailStmt = $conn->prepare("SELECT email FROM userdata WHERE email = ?");
+    $checkEmailStmt = $conn->prepare("SELECT email FROM tabProva WHERE email = ?");
     $checkEmailStmt->bind_param("s", $email);
     $checkEmailStmt->execute();
     $checkEmailStmt->store_result();
@@ -20,8 +20,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $toastClass = "#007bff"; // Primary color
     } else {
         // Prepare and bind
-        $stmt = $conn->prepare("INSERT INTO userdata (username, email, password) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $username, $email, $password);
+        $stmt = $conn->prepare("INSERT INTO tabProva (nome, email, pwd) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $nome, $email, $pwd);
 
         if ($stmt->execute()) {
             $message = "Account created successfully";
@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="mb-2 mt-2">
                 <label for="email"><i class="fa fa-envelope"></i> Email</label>
-                <input type="text" name="email" id="email" class="form-control" required>
+                <input type="email" name="email" id="email" class="form-control" required>
             </div>
             <div class="mb-2 mt-2">
                 <label for="password"><i class="fa fa-lock"></i> Password</label>
