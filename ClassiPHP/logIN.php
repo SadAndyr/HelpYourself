@@ -50,11 +50,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/295/295128.png">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="../css/login.css">
-    <title>Login Page</title>
+    
+    <link rel="stylesheet" href="../ClassiCSS/styleLogIN.css">
+    <title>Pagina di Login</title>
+
 </head>
 
-<body class="bg-light">
+<body class="bg-light">    
     <div class="container p-5 d-flex flex-column align-items-center">
         <?php if ($message): ?>
             <div class="toast align-items-center text-white 
@@ -72,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;">
             <div class="row">
                 <i class="fa fa-user-circle-o fa-3x mt-1 mb-2" style="text-align: center; color: green;"></i>
-                <h5 class="text-center p-4" style="font-weight: 700;">Login Into Your Account</h5>
+                <h5 class="text-center p-4" style="font-weight: 700;">Accedi al tuo Account</h5>
             </div>
             <div class="col-mb-3">
                 <label for="email"><i class="fa fa-envelope"></i> Email</label>
@@ -87,8 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="col mb-2 mt-4">
                 <p class="text-center" style="font-weight: 600; color: navy;"><a href="./signIn.php"
-                        style="text-decoration: none;">Create Account</a> OR <a href="./resetpassword.php"
-                        style="text-decoration: none;">Forgot Password</a></p>
+                        style="text-decoration: none;">Crea un Account</a> O <a href="./resetpassword.php"
+                        style="text-decoration: none;">Password dimenticata</a></p>
             </div>
         </form>
     </div>
