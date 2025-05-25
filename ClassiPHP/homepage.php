@@ -37,14 +37,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="filtri">Specifica le preferenze:</label>
                     <label for="filtroSettore">Settore:</label>
                     <select name="settore" id="filtroSettore">
+                        <option value="" selected></option>
                         <option value="elettrotecnica" <?= $settore == "elettrotecnica" ? "selected" : "" ?>>Elettrotecnica
                         </option>
                         <option value="edilizia" <?= $settore == "edilizia" ? "selected" : "" ?>>Edilizia</option>
                         <option value="idraulica" <?= $settore == "idraulica" ? "selected" : "" ?>>Idraulica</option>
+                        <option value="fallito" <?= $settore == "fallito" ? "selected" : "" ?>>Fallito</option>
                     </select>
 
                     <label for="filtroProvincia">Provincia:</label>
                     <select name="provincia" id="filtroProvincia">
+                        <option value="" selected></option>
                         <option value="to" <?= $provincia == "to" ? "selected" : "" ?>>Torino</option>
                         <option value="cn" <?= $provincia == "cn" ? "selected" : "" ?>>Cuneo</option>
                         <option value="vc" <?= $provincia == "vc" ? "selected" : "" ?>>Vercelli</option>
@@ -55,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <label for="filtroGiorni">Giorno:</label>
                     <select name="giorni" id="filtroGiorni">
+                        <option value="" selected></option>
                         <option value="lun" <?= $giorni == "lun" ? "selected" : "" ?>>Lunedì</option>
                         <option value="mar" <?= $giorni == "mar" ? "selected" : "" ?>>Martedì</option>
                         <option value="mer" <?= $giorni == "mer" ? "selected" : "" ?>>Mercoledì</option>
@@ -81,20 +85,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </tr>
                     <?php
 
-                    $stmt = $conn->prepare("SELECT nome, cognome, società, valutazione FROM professionisti WHERE ");
+                    //creazione clausola where con filtri
+                    $filtri = [
+                        "settore" => $settore,
+                        "provincia" => $provincia,
+                        "giorni" => $giorni,
+                        "orarioInzio" => $orario1,
+                        "orarioFine" => $orario2,
+                    ] ;
+                    $condizioni = [];
+                    foreach ($filtri as $campo => $value) {
+                        if (isset($value) && $value != '') {
+                            $condizioni[] = "$campo = \"$value\"";
+                        }
+                    }
+                    $clausola= implode(" AND ", $condizioni);
+                    $where= "WHERE ".$clausola;
+                    $query= "SELECT nome, cognome, societa, valutazione FROM professionisti ".(($clausola <> "") ? $where : "");  
+                    echo($query);
+                    $stmt = $conn->prepare($query);
                     $stmt->execute();
                     $result=$stmt->get_result();
-                    for ($i = 0; $i < $stmt->num_rows; $i++) {
-                        
+                    
+                    while ($row = $result->fetch_assoc()) {
                     ?>
-
-                    <th>
-
-                    </th>
-
+                    <tr>
+                        <td><?php echo $row["nome"]; ?></td>
+                        <td><?php echo $row["cognome"]; ?></td>
+                        <td><?php echo $row["societa"]; ?></td>
+                        <td><?php echo $row["valutazione"]; ?></td>
+                    </tr>
                     <?php
-                    }
-
+                        }
                     ?>
 
                 </table>
