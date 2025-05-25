@@ -1,62 +1,104 @@
+<?php
+include("../Database/dbConnection.php");
+$settore = $provincia = $giorni = $orario1 = $orario2 = "";
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $settore = $_POST['settore'] ?? '';
+    $provincia = $_POST['provincia'] ?? '';
+    $giorni = $_POST['giorni'] ?? '';
+    $orario1 = $_POST['orario1'] ?? '';
+    $orario2 = $_POST['orario2'] ?? '';
+}
+?>
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>HelpYourself</title>
     <meta charset="UTF-8">
-    <meta name="keywords" content="professionista, idraulico, elettricista, elettrotecnico" > <!--da aggiungere-->
+    <meta name="keywords" content="professionista, idraulico, elettricista, elettrotecnico"> <!--da aggiungere-->
     <meta name="author" content="Asoltanei Andrei, Condello Christian">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../ClassiCSS/styleHomePage.css" media="all" />
 </head>
+
 <body>
     <div id="contenitore">
         <header>
             <img src="../Assets/LogoLiscio.png" alt="Logo" width="20%" height="auto">
-            <img src="../Assets/scritta logo.png" alt="HelpYourself" width="auto" height="100px"> 
+            <img src="../Assets/scritta logo.png" alt="HelpYourself" width="auto" height="100px">
         </header>
-        <section id="filtri">
-            <form id="form_filtri">
-                <label for="filtri">Specifica le preferenze:</label>
-                <select name="menu1" id="filtro 1" >
-                    <option value="opzione1">1</option>
-                    <option value="opzione2">2</option>
-                    <option value="opzione3">3</option>
-                </select>
-                <select name="menu2" id="filtro 2" >
-                    <option value="opzione1">1</option>
-                    <option value="opzione2">2</option>
-                    <option value="opzione3">3</option>
-                </select>
-                <select name="menu3" id="filtro 3" >
-                    <option value="opzione1">1</option>
-                    <option value="opzione2">2</option>
-                    <option value="opzione3">3</option>
-                </select>
-                <select name="menu4" id="filtro 4" >
-                    <option value="opzione1">1</option>
-                    <option value="opzione2">2</option>
-                    <option value="opzione3">3</option>
-                </select>
-            </form>    
-        
-        </section>
-        <section id="tabella_professionisti">
-            <table>
-                <tr>
-                    <th>Nome</th>
-                    <th>Cognome</th>
-                    <th>Società</th>
-                    <th>Valutazione</th>
-                    <th>Prenotazione <br> veloce</th> <!--genera una finestra di conferma-->
-                </tr>
-                <?php
-                $conn = new mysqli("localhost","root","","");
-                
-                
-                ?>
-            </table>
-        </section>
+
+        <body>
+            <section id="filtri">
+                <form id="form_filtri" method="POST" action="">
+                    <label for="filtri">Specifica le preferenze:</label>
+                    <label for="filtroSettore">Settore:</label>
+                    <select name="settore" id="filtroSettore">
+                        <option value="elettrotecnica" <?= $settore == "elettrotecnica" ? "selected" : "" ?>>Elettrotecnica
+                        </option>
+                        <option value="edilizia" <?= $settore == "edilizia" ? "selected" : "" ?>>Edilizia</option>
+                        <option value="idraulica" <?= $settore == "idraulica" ? "selected" : "" ?>>Idraulica</option>
+                    </select>
+
+                    <label for="filtroProvincia">Provincia:</label>
+                    <select name="provincia" id="filtroProvincia">
+                        <option value="to" <?= $provincia == "to" ? "selected" : "" ?>>Torino</option>
+                        <option value="cn" <?= $provincia == "cn" ? "selected" : "" ?>>Cuneo</option>
+                        <option value="vc" <?= $provincia == "vc" ? "selected" : "" ?>>Vercelli</option>
+                        <option value="bl" <?= $provincia == "bl" ? "selected" : "" ?>>Belluno</option>
+                        <option value="pd" <?= $provincia == "pd" ? "selected" : "" ?>>Padova</option>
+                        <option value="tv" <?= $provincia == "tv" ? "selected" : "" ?>>Treviso</option>
+                    </select>
+
+                    <label for="filtroGiorni">Giorno:</label>
+                    <select name="giorni" id="filtroGiorni">
+                        <option value="lun" <?= $giorni == "lun" ? "selected" : "" ?>>Lunedì</option>
+                        <option value="mar" <?= $giorni == "mar" ? "selected" : "" ?>>Martedì</option>
+                        <option value="mer" <?= $giorni == "mer" ? "selected" : "" ?>>Mercoledì</option>
+                        <option value="gio" <?= $giorni == "gio" ? "selected" : "" ?>>Giovedì</option>
+                        <option value="ven" <?= $giorni == "ven" ? "selected" : "" ?>>Venerdì</option>
+                        <option value="sab" <?= $giorni == "sab" ? "selected" : "" ?>>Sabato</option>
+                    </select>
+
+                    <label for="orario">Inserisci un orario (hh:mm):</label>
+                    <input type="time" name="orario1" id="orario1" value="<?= $orario1 ?>">
+                    <input type="time" name="orario2" id="orario2" value="<?= $orario2 ?>">
+
+                    <button type="submit">Applica filtri</button>
+                </form>
+            </section>
+            <section id="tabella_professionisti">
+                <table>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Cognome</th>
+                        <th>Società</th>
+                        <th>Valutazione</th>
+                        <th>Prenotazione <br> veloce</th> <!--genera una finestra di conferma-->
+                    </tr>
+                    <?php
+
+                    $stmt = $conn->prepare("SELECT nome, cognome, società, valutazione FROM professionisti WHERE ");
+                    $stmt->execute();
+                    $result=$stmt->get_result();
+                    for ($i = 0; $i < $stmt->num_rows; $i++) {
+                        
+                    ?>
+
+                    <th>
+
+                    </th>
+
+                    <?php
+                    }
+
+                    ?>
+
+                </table>
+            </section>
     </div>
 </body>
 
