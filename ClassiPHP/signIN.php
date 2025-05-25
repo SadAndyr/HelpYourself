@@ -1,5 +1,5 @@
 <?php
-include 'C:\xampp\htdocs\HelpYourself\Database\dbConnection.php';
+include '..\Database\dbConnection.php';
 
 $message = "";
 $toastClass = "";
