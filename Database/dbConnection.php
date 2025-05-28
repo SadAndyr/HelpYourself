@@ -34,7 +34,7 @@ create TABLE professionisti(
     Clienti(_id_, nome, cognome, telefono, email);
     Professionisti(_id_, Piva, nome, cognome, email, telefono, settore,  provincia, giorni, orarioInizio, orarioFine);
     Prenotazioni(_idcliente, idprofessionista_, giorno, ora, provincia);
-
+    Recensioni(id, idCliente, idProfessionista, contenuto, valutazione);
 
 */
 

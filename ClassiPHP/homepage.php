@@ -10,6 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $orario = $_POST['orario'] ?? '';
 
 }
+
+if (isset($_POST['submit'])) {
+}
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <th>Prenotazione <br> veloce</th> <!--genera una finestra di conferma-->
                     </tr>
                     <?php
-
                     //creazione clausola where con filtri
                     $filtri = [
                         "settore" => $settore,
@@ -102,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                     $clausola= implode(" AND ", $condizioni);
                     $where= "WHERE ".$clausola;
-                    $query= "SELECT nome, cognome, telefono  FROM professionisti ".(($clausola <> "") ? $where : "");  /*aggiungere valutazione calcolata dalla media delle valutazioni valutazione */
+                    $query= "SELECT nome, cognome, telefono, AVG(r.valutazione) as valutazione  FROM professionisti p INNER JOIN recensioni r on p.id=r.idProfessionista ".(($clausola <> "") ? $where : "")." group by p.id";
                     echo($query);
                     $stmt = $conn->prepare($query);
                     $stmt->execute();
@@ -114,12 +116,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <td><?php echo $row["nome"]; ?></td>
                         <td><?php echo $row["cognome"]; ?></td>
                         <td><?php echo $row["telefono"]; ?></td>
-                        <!--<td><?php echo $row["valutazione"]; ?></td>-->
+                        <td><?php echo $row["valutazione"]; ?></td>
+                        <td><input type="submit" value="prenotazione veloce"></td>
                     </tr>
                     <?php
                         }
                     ?>
-
                 </table>
             </section>
     </div>
