@@ -18,17 +18,24 @@ if ($conn->connect_error) {
 }
 /*
 create TABLE professionisti(
-    id int PRIMARY KEY,
-	nome varchar(50),
+    id int PRIMARY KEY AUTO_INCREMENT,
+	Piva varchar(11) UNIQUE,
+    nome varchar(50),
 	cognome varchar(50),
-    societa varchar(50) UNIQUE,
-    valutazione int CHECK (valutazione in (1,2,3,4,5)),
-    settore varchar(50) CHECK (settore in ("idraulico", "elettricista", "fallito")),
+    email varchar(50),
+    telefono varchar(10),
+    settore varchar(50) CHECK (settore in ("Idraulica", "Elettrotecnica", "Edilizia")),
     provincia varchar(50) CHECK (provincia in ("to", "cn", "vc", "bl", "pd", "tv")),
     giorni varchar(50) CHECK (giorni in ("lun", "mar", "mer", "gio", "ven", "sab")),
     orarioInizio time,
     orarioFine time
-)
+)    
+
+    Clienti(_id_, nome, cognome, telefono, email);
+    Professionisti(_id_, Piva, nome, cognome, email, telefono, settore,  provincia, giorni, orarioInizio, orarioFine);
+    Prenotazioni(_idcliente, idprofessionista_, giorno, ora, provincia);
+
+
 */
 
 

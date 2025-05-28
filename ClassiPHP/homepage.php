@@ -1,14 +1,14 @@
 <?php
 include("../Database/dbConnection.php");
-$settore = $provincia = $giorni = $orario1 = $orario2 = "";
+$settore = $provincia = $giorni = $orario = "";
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $settore = $_POST['settore'] ?? '';
     $provincia = $_POST['provincia'] ?? '';
     $giorni = $_POST['giorni'] ?? '';
-    $orario1 = $_POST['orario1'] ?? '';
-    $orario2 = $_POST['orario2'] ?? '';
+    $orario = $_POST['orario'] ?? '';
+
 }
 ?>
 
@@ -68,8 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </select>
 
                     <label for="orario">Inserisci un orario (hh:mm):</label>
-                    <input type="time" name="orario1" id="orario1" value="<?= $orario1 ?>">
-                    <input type="time" name="orario2" id="orario2" value="<?= $orario2 ?>">
+                    <input type="time" name="orario" id="orario" value="<?= $orario ?>">
 
                     <button type="submit">Applica filtri</button>
                 </form>
@@ -89,19 +88,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $filtri = [
                         "settore" => $settore,
                         "provincia" => $provincia,
-                        "giorni" => $giorni,
-                        "orarioInzio" => $orario1,
-                        "orarioFine" => $orario2,
+                        "giorni" => $giorni
                     ] ;
+                    $ora= ($orario != "") ? "orarioInizio < \"$orario.00\" AND orarioFine > \"$orario.00\"": "";
                     $condizioni = [];
                     foreach ($filtri as $campo => $value) {
                         if (isset($value) && $value != '') {
                             $condizioni[] = "$campo = \"$value\"";
                         }
                     }
+                    if($ora != ""){
+                        $condizioni[] = $ora;
+                    }
                     $clausola= implode(" AND ", $condizioni);
                     $where= "WHERE ".$clausola;
-                    $query= "SELECT nome, cognome, societa, valutazione FROM professionisti ".(($clausola <> "") ? $where : "");  
+                    $query= "SELECT nome, cognome, telefono  FROM professionisti ".(($clausola <> "") ? $where : "");  /*aggiungere valutazione calcolata dalla media delle valutazioni valutazione */
                     echo($query);
                     $stmt = $conn->prepare($query);
                     $stmt->execute();
@@ -112,8 +113,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <tr>
                         <td><?php echo $row["nome"]; ?></td>
                         <td><?php echo $row["cognome"]; ?></td>
-                        <td><?php echo $row["societa"]; ?></td>
-                        <td><?php echo $row["valutazione"]; ?></td>
+                        <td><?php echo $row["telefono"]; ?></td>
+                        <!--<td><?php echo $row["valutazione"]; ?></td>-->
                     </tr>
                     <?php
                         }
