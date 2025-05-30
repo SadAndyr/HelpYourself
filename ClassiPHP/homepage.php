@@ -32,8 +32,8 @@ if (isset($_POST['submit'])) {
 <body>
     <div id="contenitore">
         <header>
-            <img src="../Risorse/Grafica/Logo.png" alt="Logo" width="20%" height="auto">
-            <img src="../Assets/scritta logo.png" alt="HelpYourself" width="auto" height="100px">
+            <img id="Logo" src="../Risorse/Grafica/LogoPlain.png" alt="Logo" width="20%" height="auto">
+            <img src="../Risorse/Grafica/LogoScritta.png" alt="HelpYourself" width="auto" height="100px">
         </header>
         <fieldset>
         <legend id="filtri">Seleziona i dettagli della prenotazione:</legend>    
@@ -108,7 +108,7 @@ if (isset($_POST['submit'])) {
                     }
                     $clausola= implode(" AND ", $condizioni);
                     $where= "WHERE ".$clausola;
-                    $query= "SELECT nome, cognome, telefono, AVG(r.valutazione) as valutazione  FROM professionisti p INNER JOIN recensioni r on p.id=r.idProfessionista ".(($clausola <> "") ? $where : "")." group by p.id";
+                    $query= "SELECT nome, cognome, telefono, AVG(r.valutazione) as valutazione  FROM professionisti p LEFT JOIN recensioni r on p.id=r.idProfessionista ".(($clausola <> "") ? $where : "")." group by p.id";
                     echo($query);
                     $stmt = $conn->prepare($query);
                     $stmt->execute();
@@ -120,7 +120,7 @@ if (isset($_POST['submit'])) {
                         <td><?php echo $row["nome"]; ?></td>
                         <td><?php echo $row["cognome"]; ?></td>
                         <td><?php echo $row["telefono"]; ?></td>
-                        <td><?php echo number_format($row["valutazione"],1); ?></td>
+                        <td><?php echo ($row["valutazione"]!= null) ? number_format($row["valutazione"],1) : "N/A"; ?></td>
                         <td><input type="submit" value="prenotazione veloce"></td>
                     </tr>
                     <?php
