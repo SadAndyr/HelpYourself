@@ -10,9 +10,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $orario = $_POST['orario'] ?? '';
 
 }
-
+/*
 if (isset($_POST['submit'])) {
+
 }
+*/
 ?>
 
 <!DOCTYPE html>
@@ -21,23 +23,24 @@ if (isset($_POST['submit'])) {
 <head>
     <title>HelpYourself</title>
     <meta charset="UTF-8">
-    <meta name="keywords" content="professionista, idraulico, elettricista, elettrotecnico"> <!--da aggiungere-->
+    <meta name="keywords" conte nt="professionista, idraulico, elettricista, elettrotecnico"> <!--da aggiungere-->
     <meta name="author" content="Asoltanei Andrei, Condello Christian">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../ClassiCSS/styleHomePage.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="../ClassiCSS/styleHome.css" media="all" />
 </head>
 
 <body>
     <div id="contenitore">
         <header>
-            <img src="../Assets/LogoLiscio.png" alt="Logo" width="20%" height="auto">
+            <img src="../Risorse/Grafica/Logo.png" alt="Logo" width="20%" height="auto">
             <img src="../Assets/scritta logo.png" alt="HelpYourself" width="auto" height="100px">
         </header>
+        <fieldset>
+        <legend id="filtri">Seleziona i dettagli della prenotazione:</legend>    
 
-        <body>
-            <section id="filtri">
-                <form id="form_filtri" method="POST" action="">
-                    <label for="filtri">Specifica le preferenze:</label>
+            
+            <form id="form_filtri" method="POST" action="">
+                    
                     <label for="filtroSettore">Settore:</label>
                     <select name="settore" id="filtroSettore">
                         <option value="" selected></option>
@@ -75,9 +78,10 @@ if (isset($_POST['submit'])) {
 
                     <button type="submit">Applica filtri</button>
                 </form>
-            </section>
+        
+            </fieldset>
             <section id="tabella_professionisti">
-                <table>
+                <table class="tabella-stilizzata">
                     <tr>
                         <th>Nome</th>
                         <th>Cognome</th>
@@ -116,7 +120,7 @@ if (isset($_POST['submit'])) {
                         <td><?php echo $row["nome"]; ?></td>
                         <td><?php echo $row["cognome"]; ?></td>
                         <td><?php echo $row["telefono"]; ?></td>
-                        <td><?php echo $row["valutazione"]; ?></td>
+                        <td><?php echo number_format($row["valutazione"],1); ?></td>
                         <td><input type="submit" value="prenotazione veloce"></td>
                     </tr>
                     <?php
