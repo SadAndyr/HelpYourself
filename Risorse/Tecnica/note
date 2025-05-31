@@ -1,0 +1,52 @@
+Per far si che la riga non si colori se sono nell'ultima cella della tabella, quella per la prenotazione
+
+
+<script>
+  document.querySelectorAll('.tabella-stilizzata tbody tr').forEach(tr => {
+    const celle = tr.querySelectorAll('td');
+    const lastCell = celle[celle.length - 1];
+
+    // Quando entri in una cella che NON è l'ultima
+    celle.forEach((td, index) => {
+      if (index !== celle.length - 1) {
+        td.addEventListener('mouseenter', () => {
+          tr.classList.add('hover-attiva');
+        });
+        td.addEventListener('mouseleave', () => {
+          tr.classList.remove('hover-attiva');
+        });
+      }
+    });
+
+    // Quando entri nella cella dell'ultima colonna
+    lastCell.addEventListener('mouseenter', () => {
+      tr.classList.remove('hover-attiva');
+    });
+  });
+</script>
+✅ 3. HTML (resta invariato)
+html
+Copia
+Modifica
+<table class="tabella-stilizzata">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr onclick="window.location.href='dettagli.php?id=1'">
+      <td>1</td>
+      <td>Mario Rossi</td>
+      <td>mario@example.com</td>
+    </tr>
+    <tr onclick="window.location.href='dettagli.php?id=2'">
+      <td>2</td>
+      <td>Luigi Bianchi</td>
+      <td>luigi@example.com</td>
+    </tr>
+  </tbody>
+</table>
+

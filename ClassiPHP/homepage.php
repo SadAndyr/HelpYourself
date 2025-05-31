@@ -48,7 +48,7 @@ if (isset($_POST['submit'])) {
                         </option>
                         <option value="edilizia" <?= $settore == "edilizia" ? "selected" : "" ?>>Edilizia</option>
                         <option value="idraulica" <?= $settore == "idraulica" ? "selected" : "" ?>>Idraulica</option>
-                        <option value="fallito" <?= $settore == "fallito" ? "selected" : "" ?>>Fallito</option>
+                        
                     </select>
 
                     <label for="filtroProvincia">Provincia:</label>
@@ -82,13 +82,16 @@ if (isset($_POST['submit'])) {
             </fieldset>
             <section id="tabella_professionisti">
                 <table class="tabella-stilizzata">
+                    <thead>
                     <tr>
                         <th>Nome</th>
                         <th>Cognome</th>
-                        <th>Società</th>
+                        <th>Telefono</th>
                         <th>Valutazione</th>
                         <th>Prenotazione <br> veloce</th> <!--genera una finestra di conferma-->
                     </tr>
+                    </head>
+                    <tbody>
                     <?php
                     //creazione clausola where con filtri
                     $filtri = [
@@ -116,16 +119,19 @@ if (isset($_POST['submit'])) {
                     
                     while ($row = $result->fetch_assoc()) {
                     ?>
-                    <tr>
+                    
+                    <tr onclick="window.location.href='logIN.php'" style='cursor:pointer;'>
                         <td><?php echo $row["nome"]; ?></td>
                         <td><?php echo $row["cognome"]; ?></td>
                         <td><?php echo $row["telefono"]; ?></td>
-                        <td><?php echo ($row["valutazione"]!= null) ? number_format($row["valutazione"],1) : "N/A"; ?></td>
-                        <td><input type="submit" value="prenotazione veloce"></td>
+                        <td><?php echo ($row["valutazione"]!= null) ? number_format($row["valutazione"],1) : "---"; ?></td>
+                        <td class="CellaPrenotazione" onclick="event.stopPropagation();"><input class="bottone" type="submit" value="Prenota ora" ></td>
                     </tr>
+                    
                     <?php
                         }
                     ?>
+                    </tbody>
                 </table>
             </section>
     </div>

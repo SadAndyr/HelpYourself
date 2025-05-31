@@ -1,6 +1,6 @@
 #contenitore{
-    width: 80%;
-    min-height: device-height;
+    width: 70%;
+    min-height: inherit;
     margin: auto;
     background: #FdFdFd;
     border-radius: 20px;
@@ -13,7 +13,6 @@
 #form_filtri{
     display: flex;
     justify-content: space-between;
-    
     padding: 20px;
   
 }
@@ -39,6 +38,7 @@ body{
     font-family: Verdana, Tahoma, "Times New Roman", Times, serif;
     line-height: 1.5;
     background-color: rgb(204, 209, 209);
+    min-height: 100vh;
 }
 
 .tabella-stilizzata {
@@ -50,23 +50,74 @@ body{
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
+  font-family: 'Times New Roman', serif;
+  font-size: larger;
+
+  border-collapse: collapse;
 }
 
 .tabella-stilizzata th,
 .tabella-stilizzata td {
-  padding: 12px 20px;
+  padding: 0px 20px;
+  height: inherit;
   text-align: center;
+  align-items: center;
   border-bottom: 1px solid #ddd;
-  background-color: #fff;
+  /*background-color: #fff;*/
 }
 
+
+
+
 .tabella-stilizzata thead th {
-  background-color: #f4f4f4;
+  background-color: #a09b98;
   font-weight: bold;
 }
 
-.tabella-stilizzata tbody tr:hover {
-  background-color: #f1f9ff;
+.tabella-stilizzata tbody tr {
+  height: 30px;
+  transition: background-color 0.2s ease;
+  
 }
 
+.tabella-stilizzata tbody tr:nth-child(even) {
+  background-color: #e0e0e0;
+}
+
+.tabella-stilizzata tbody tr:nth-child(odd) {
+  background-color: #eeeeee;
+}
+
+.tabella-stilizzata tbody tr:hover {
+  background-color: #cccccc;
+  cursor: pointer;
+}
+
+.tabella-stilizzata tbody td.CellaPrenotazione{
+  background-color: #fff;
+  border-left: 1px solid #ddd;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  
+}
+
+.bottone{
+  color:#383838;
+  font-weight: bold;
+  width: auto;
+  height: auto;
+  text-align: center;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  border-width: 1px;
+  border-style: outset;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+.bottone:hover{
+  background-color: #c2c2c2;
+
+}
