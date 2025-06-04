@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $provincia = $_POST['provincia'] ?? null;
 
         $stmt = $conn->prepare("INSERT INTO prenotazioni (idCliente, idProfessionista, giorno, ora, provincia) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("isss",$id, $idProfessionista, $giorni, $orario, $provincia);
+        $stmt->bind_param("iisss",$id, $idProfessionista, $giorni, $orario, $provincia);
 
         if ($stmt->execute()) {
             $_SESSION['show_confirmation'] = true;
@@ -33,6 +33,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $giorni = $_POST['giorni'] ?? '';
         $orario = $_POST['orario'] ?? '';
     }
+}
+
+
+
+
+if (isset($_GET['logout'])) {
+    session_start();
+    session_destroy();
+    header("Location: accesso.php");
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -91,13 +101,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php if (isset($_SESSION['show_confirmation'])): ?>
         <div class="confirmation-banner">
             Richiesta inviata con successo!
-            <button onclick="this.parentElement.remove()" style="
+            <button onclick="this.parentElement.remove()" 
+                style="
                 background: none;
                 border: none;
                 color: white;
                 font-weight: bold;
-                cursor: pointer;
-            ">X</button>
+                cursor: pointer;"
+            >X</button>
         </div>
         
         <?php unset($_SESSION['show_confirmation']); ?>
@@ -116,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </thead>
                 <tbody>
                     <?php
-                    // Creazione clausola where con filtri
+                    
                     $filtri = [
                         "settore" => $settore,
                         "provincia" => $provincia,
@@ -162,5 +173,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </table>
         </section>
     </div>
+    <a style="position:right;" href="?logout=1" class="logout-btn">Logout</a>
 </body>
 </html>
