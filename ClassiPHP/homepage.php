@@ -3,17 +3,23 @@ session_start();
 include("../Database/dbConnection.php");
 $settore = $provincia = $giorni = $orario = "";
 
-// Gestione del form di prenotazione PRIMA di qualsiasi output HTML
+if (!isset($_SESSION['id'])) {
+    header("Location: accesso.php");
+    exit();
+}
+
+$id= $_SESSION["id"];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['submit'])) {
-        // Elaborazione prenotazione
+        
         $idProfessionista = $_POST['idProfessionista'];
         $giorni = $_POST['giorni'] ?? null;
         $orario = $_POST['orario'] ?? null;
         $provincia = $_POST['provincia'] ?? null;
 
-        $stmt = $conn->prepare("INSERT INTO prenotazioni (idCliente, idProfessionista, giorno, ora, provincia) VALUES (3, ?, ?, ?, ?)");
-        $stmt->bind_param("isss", $idProfessionista, $giorni, $orario, $provincia);
+        $stmt = $conn->prepare("INSERT INTO prenotazioni (idCliente, idProfessionista, giorno, ora, provincia) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("isss",$id, $idProfessionista, $giorni, $orario, $provincia);
 
         if ($stmt->execute()) {
             $_SESSION['show_confirmation'] = true;
@@ -21,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
     } else {
-        // Elaborazione filtri
+        
         $settore = $_POST['settore'] ?? '';
         $provincia = $_POST['provincia'] ?? '';
         $giorni = $_POST['giorni'] ?? '';
@@ -78,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
                 <label for="orario">Inserisci un orario (hh:mm):</label>
                 <input type="time" name="orario" id="orario" value="<?= $orario ?>">
-                <button type="submit">Applica filtri</button>
+                <button id="inviaFiltri" type="submit">Applica filtri</button>
             </form>
         </fieldset>
 
@@ -93,11 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 cursor: pointer;
             ">X</button>
         </div>
-        <script>
-            setTimeout(() => {
-                document.querySelector('.confirmation-banner')?.remove();
-            }, 3000);
-        </script>
+        
         <?php unset($_SESSION['show_confirmation']); ?>
         <?php endif; ?>
 
@@ -133,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $clausola = implode(" AND ", $condizioni);
                     $where = "WHERE ".$clausola;
                     $query = "SELECT p.*, AVG(r.valutazione) as valutazione FROM professionisti p LEFT JOIN recensioni r on p.id=r.idProfessionista ".(($clausola <> "") ? $where : "")." GROUP BY p.id";
-                    
+                    echo($query);
                     $stmt = $conn->prepare($query);
                     $stmt->execute();
                     $result = $stmt->get_result();
